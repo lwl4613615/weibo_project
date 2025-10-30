@@ -13,6 +13,7 @@ pub async fn create_user_service(ruser: ReqCreateUser) -> Result<u32> {
        gender:ruser.gender,
         birthday:ruser.birthday,
     };
+  
     let uid=create_user_model((user,user_info)).await?;
     Ok(uid)
 
