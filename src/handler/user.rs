@@ -1,7 +1,7 @@
-use axum::{Json, response::{IntoResponse, Response}};
+use axum::{Json, response::Response};
 
 use crate::service::user::create_user_service;
-
+use crate::utils::result::response_json;
 
 pub async fn  home_handler() -> String {
     "Welcome to the Home Page".to_string()
@@ -15,20 +15,20 @@ pub struct ReqCreateUser {
     pub gender:Option<i16>,
     pub birthday:Option<i32>
 }
+#[derive(serde::Serialize)]
+struct RespUserId {
+    pub uid:u32
+}
 pub async fn create_user_handler(Json(user):Json<ReqCreateUser>) -> Response {
 
     if let Ok(uid) = create_user_service(user).await {
-        Json(serde_json::json!({
-            "code":200,
-            "msg":"用户创建成功",
-            "data":{
-                "uid":uid
-            }
-        })).into_response()
+        response_json(0,RespUserId{
+            uid
+        }).await
+   
     } else {
-        Json(serde_json::json!({
-            "code":500,
-            "msg":"用户创建失败"
-        })).into_response()
+        response_json(1,()).await
+   
     }
+
 } 

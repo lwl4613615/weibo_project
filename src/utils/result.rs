@@ -22,7 +22,7 @@ impl<T:Serialize> ResponseData<T>
     }
 }
 
-fn response_json<T:Serialize>(code:usize,data:T)->Response{
+pub async fn response_json<T:Serialize>(code:usize,data:T)->Response{
     let res=ResponseData::new(code,data);
     let mut data=String::from("");
     if let Ok(json)=serde_json::to_string(&res){

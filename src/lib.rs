@@ -8,8 +8,9 @@ pub mod service;
 pub mod router;
 
 pub async fn run() {
-   model::db_conn_init().await;
+   
    config::init_config().await;
+   model::db_conn_init().await;
    println!("App Configs: {:?}", config::app_config::APP_CONFIGS.get().unwrap());
    self::router::start_route().await;
 }
