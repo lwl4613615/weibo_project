@@ -1,0 +1,12 @@
+[db]
+host = "appcompat-share"
+port = 5432
+username = "lwl"
+password = "594188369"
+database_name="rustlearn"
+[cache]
+host = "127.0.0.1"
+port = 123
+
+[jwt]
+secret="hello23546532"
