@@ -1,21 +1,30 @@
-use sea_orm::{ActiveModelTrait, ActiveValue::{NotSet, Set}, DbErr,  TransactionTrait};
+use sea_orm::{
+    ActiveModelTrait,
+    ActiveValue::{NotSet, Set},
+    ColumnTrait, Condition, DbErr, EntityTrait, QueryFilter, TransactionTrait,
+};
 
-use crate::{entities::{wb_user, wb_user_info},  model::get_db, utils::time::local_timestamp};
+use crate::{
+    entities::{
+        wb_user::{self, Model},
+        wb_user_info,
+    },
+    model::get_db,
+    utils::time::local_timestamp,
+};
 
-pub struct User{
-    pub phone:String,
-    pub password:String,
+pub struct User {
+    pub phone: String,
+    pub password: String,
 }
-pub struct UserInfo{      
-    pub nickname:Option<String>,
-    pub avatar:Option<String>,
-    pub gender:Option<i16>,
-    pub birthday:Option<i32>
+pub struct UserInfo {
+    pub nickname: Option<String>,
+    pub avatar: Option<String>,
+    pub gender: Option<i16>,
+    pub birthday: Option<i32>,
 }
 
-pub async fn create_user_model((u,uf):(User,UserInfo)) -> Result<u32,DbErr> {
-
-
+pub async fn create_user_model((u, uf): (User, UserInfo)) -> Result<u32, DbErr> {
     let db = get_db();
     let txn = db.begin().await?;
     let now = local_timestamp() as i32;
@@ -54,5 +63,18 @@ pub async fn create_user_model((u,uf):(User,UserInfo)) -> Result<u32,DbErr> {
     txn.commit().await?;
 
     Ok(uid as u32)
+}
 
+pub async fn find_user(u: User) -> Result<Option<Model>, DbErr> {
+    use crate::entities::wb_user::Entity as User;
+    let db = get_db();
+    let res = User::find()
+        .filter(
+            Condition::all()
+                .add(wb_user::Column::Phone.eq(u.phone))
+                .add(wb_user::Column::Password.eq(u.password)),
+        )
+        .one(db)
+        .await?;
+    Ok(res)
 }
