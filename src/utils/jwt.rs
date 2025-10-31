@@ -35,7 +35,7 @@ pub fn create_jwt_token(claims: &Claims) -> Result<String, jsonwebtoken::errors:
     use jsonwebtoken::{EncodingKey, Header, encode};
     let encoding_key = EncodingKey::from_rsa_pem(JWTSECRET_INFO.get().unwrap().priavate_key.as_bytes())?;
     let token = encode(
-        &Header::new(jsonwebtoken::Algorithm::RS256),
+        &Header::new(jsonwebtoken::Algorithm::RS512),
         claims,
         &encoding_key,
     )?;
@@ -48,7 +48,8 @@ pub fn decode_jwt_token(token: &str) -> Result<Claims, jsonwebtoken::errors::Err
     let token_data = decode::<Claims>(
         token,
         &decoding_key,
-        &Validation::new(jsonwebtoken::Algorithm::RS256),
+        &Validation::new(jsonwebtoken::Algorithm::RS512),
     )?;
+    
     Ok(token_data.claims)
 }

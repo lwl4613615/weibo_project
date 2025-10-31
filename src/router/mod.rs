@@ -1,11 +1,14 @@
 pub mod user;
-use axum::{Router, response::Redirect, routing::get};
+use axum::{Router, middleware, response::Redirect, routing::get};
 use user::user_routers;
+
+use crate::middleware::jwt::AuthClaims;
 
 pub async fn start_route() {
     // build our application with a single route
     let user_router = user_routers();
     let app = Router::new()
+        .layer(middleware::from_extractor::<AuthClaims>())
         .route("/", get(|| async { Redirect::to("/user/home") }))
         .nest("/user", user_router);
 

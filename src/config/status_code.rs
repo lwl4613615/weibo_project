@@ -19,6 +19,14 @@ pub async fn init_status_code() {
                 4,
                 "用户信息错误，请使用正确的用户名和密码登录",
             );
+             map.insert(
+                5,
+                "缺少TOKEN信息，请在请求头中添加Authorization字段",
+            );
+            map.insert(
+                6,
+                "TOKEN验证失败，请重新登录",
+            );
             map
         })
         .await;
