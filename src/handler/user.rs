@@ -1,4 +1,4 @@
-use crate::utils::result::response_json;
+use crate::{middleware::jwt::AuthClaims, utils::result::response_json};
 use crate::{service::user::create_user_service, utils::warp::ErrorWrap};
 use axum::response::IntoResponse;
 use axum::{Json, response::Response};
@@ -50,4 +50,8 @@ pub async fn login_user_handler(Json(login): Json<ReqLogin>) -> Response {
     } else {
         response_json(4, ())
     }
+}
+
+pub async fn profile_handler(AuthClaims(claims): AuthClaims) -> Response {
+     response_json(0, format!("当前用户 UID: {}", claims.uid))
 }
