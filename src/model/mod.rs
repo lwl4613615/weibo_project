@@ -14,15 +14,15 @@ pub async fn db_conn_init() {
                 "postgresql://{}:{}@{}:{}/{}",
                 db.username, db.password, db.host, db.port, db.database_name
             );
-            let db_conn = Database::connect(db_url)
+           Database::connect(db_url)
                 .await
-                .expect("Database connect error");
-            db_conn
+                .expect("Database connect error")
+         
         })
         .await;
 }
 
 pub fn get_db() -> &'static DbConn {
-    let db = DB_CONN.get().unwrap();
-    db
+    DB_CONN.get().unwrap()
+    
 }

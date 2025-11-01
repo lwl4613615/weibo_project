@@ -9,7 +9,7 @@ pub struct Claims {
 
 pub static JWTSECRET_INFO: OnceCell<JwtSecret> = OnceCell::const_new();
 pub struct JwtSecret {
-    pub priavate_key: String,
+    pub private_key: String,
     pub public_key: String,
 }
 
@@ -22,18 +22,18 @@ pub async fn init_jwt_secret() {
             let mut path = std::env::current_dir().unwrap();
             path.push("public.pem");
             let public_key = tokio::fs::read_to_string(path).await.unwrap();
-            let info = JwtSecret {
-                priavate_key: private_key,
-                public_key: public_key,
-            };
-            info
+            JwtSecret {
+                private_key,
+                public_key,
+            }
+            
         })
         .await;
 }
 
 pub fn create_jwt_token(claims: &Claims) -> Result<String, jsonwebtoken::errors::Error> {
     use jsonwebtoken::{EncodingKey, Header, encode};
-    let encoding_key = EncodingKey::from_rsa_pem(JWTSECRET_INFO.get().unwrap().priavate_key.as_bytes())?;
+    let encoding_key = EncodingKey::from_rsa_pem(JWTSECRET_INFO.get().unwrap().private_key.as_bytes())?;
     let token = encode(
         &Header::new(jsonwebtoken::Algorithm::RS512),
         claims,
