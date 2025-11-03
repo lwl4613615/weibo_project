@@ -78,3 +78,17 @@ pub async fn find_user(u: User) -> Result<Option<Model>, DbErr> {
         .await?;
     Ok(res)
 }
+
+
+pub async fn find_by_uid_model(uid: u32) -> Result<Option<Model>, DbErr> {
+    let db = get_db();
+    let user = wb_user::Entity::find()
+        .filter(
+            Condition::all()
+                .add(wb_user::Column::Uid.eq(uid))
+        )
+        .one(db)
+        .await?;
+
+    Ok(user)
+}

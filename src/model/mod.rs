@@ -1,4 +1,5 @@
 pub mod user;
+pub mod follower;
 use sea_orm::{Database, DbConn};
 use tokio::sync::OnceCell;
 

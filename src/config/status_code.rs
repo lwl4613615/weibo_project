@@ -27,6 +27,10 @@ pub async fn init_status_code() {
                 6,
                 "TOKEN验证失败，请重新登录",
             );
+             map.insert(
+                7,
+                "uid参数错误，请检查后重新请求",
+            );
             map
         })
         .await;
