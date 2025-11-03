@@ -3,6 +3,7 @@
 pub mod prelude;
 
 pub mod wb_comment;
+pub mod wb_feed;
 pub mod wb_follower;
 pub mod wb_like;
 pub mod wb_post;
